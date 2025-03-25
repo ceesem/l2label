@@ -615,6 +615,14 @@ class AxonLabel:
             as the root node in the dendrite mask, by default True.
         threshold : float, optional
             The threshold for the smoothed label spreading to determine axon vertices, by default 0.
+        threshold : float, optional
+            The threshold for the smoothed label spreading to determine axon vertices, by default 0.
+        root_is_soma : bool, optional
+            If True, the root node is considered to be the soma and thus counts as non-axon, by default False
+        is_axon_seg : np.ndarray, optional
+            Precomputed segment-level axon probability ratio, by default None
+        evaluate_isolated_dendrites : bool, optional
+            If True, isolated dendrite components are flipped if they improve the segregation index and are net-positive in the log-odds along the path to root, by default False
 
         Returns
         -------
