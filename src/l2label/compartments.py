@@ -2,12 +2,13 @@ import json
 import pathlib
 from typing import Literal, Optional, Union
 
-import joblib
 import numpy as np
 import pandas as pd
 import xgboost
 from meshparty import meshwork
 from scipy import sparse
+
+from . import models
 
 __all__ = [
     "make_skel_prop_df",
@@ -312,6 +313,8 @@ def save_model(
         modelpath
         / f"{model_name}_ds{downstream_hops}_us{upstream_hops}_bd{bidirectional_hops}.joblib"
     )
+    model.save_model(model_filename)
+
     outdata = {
         "downstream_hops": downstream_hops,
         "upstream_hops": upstream_hops,
@@ -320,7 +323,6 @@ def save_model(
         "spread_alpha": spread_alpha,
         "model_file": str(model_filename.absolute()),
     }
-    joblib.dump(model, outdata["model_file"])
     description_file = (
         filepath
         / f"{model_name}_ds{downstream_hops}_us{upstream_hops}_bd{bidirectional_hops}.json"
@@ -343,13 +345,28 @@ class AxonLabel:
     ):
         if config is not None:
             if not isinstance(config, dict):
-                with open(config, "r") as f:
-                    config = json.load(f)
+                config = models.load_model_config(config, dir="")
             self._downstream_hops = config.get("downstream_hops")
             self._upstream_hops = config.get("upstream_hops")
             self._bidirectional_hops = config.get("bidirectional_hops")
             self._spread_alpha = config.get("spread_alpha")
-            self._model = joblib.load(config.get("model_file"))
+            self._load_model(config.get("model_file"))
+            self._feature_columns = config.get("feature_columns")
+
+        elif (
+            config is None
+            and downstream_hops is None
+            and upstream_hops is None
+            and bidirectional_hops is None
+            and model is None
+            and spread_alpha is None
+        ):
+            config = models.load_model_config()
+            self._downstream_hops = config.get("downstream_hops")
+            self._upstream_hops = config.get("upstream_hops")
+            self._bidirectional_hops = config.get("bidirectional_hops")
+            self._spread_alpha = config.get("spread_alpha")
+            self._load_model(config.get("model_file"))
             self._feature_columns = config.get("feature_columns")
         else:
             if (
@@ -603,6 +620,7 @@ class AxonLabel:
         root_is_soma: bool = False,
         is_axon_seg: Optional[np.ndarray] = None,
         evaluate_isolated_dendrites: bool = False,
+        to_mesh_index: bool = False,
     ):
         """Predict a dendrite mask based on the smoothed label spreading and segment-level vote.
 
@@ -647,4 +665,13 @@ class AxonLabel:
             in_root_comp = comp_labels == comp_labels[nrn.skeleton.root]
         else:
             in_root_comp = np.full(len(nrn.skeleton.vertices), True)
-        return ~np.logical_and(~is_axon_base, in_root_comp)
+        is_axon = ~np.logical_and(~is_axon_base, in_root_comp)
+        if to_mesh_index:
+            is_axon_sk = nrn.SkeletonIndex(np.flatnonzero(is_axon))
+            is_axon = is_axon_sk.to_mesh_mask
+        return is_axon
+
+    def _load_model(self, filepath: str):
+        """Load a model from a file."""
+        self._model = xgboost.XGBClassifier()
+        self._model.load_model(filepath)

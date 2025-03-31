@@ -2261,7 +2261,6 @@ name = "l2label"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "joblib" },
     { name = "meshparty" },
     { name = "numpy", version = "2.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "numpy", version = "2.2.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
@@ -2294,7 +2293,6 @@ profile = [
 
 [package.metadata]
 requires-dist = [
-    { name = "joblib", specifier = ">=1.4.2" },
     { name = "meshparty", specifier = ">=1.18.2" },
     { name = "numpy", specifier = ">=2.0.2" },
     { name = "pandas", specifier = ">=2.2.3" },
