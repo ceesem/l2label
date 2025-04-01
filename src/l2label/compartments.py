@@ -114,12 +114,12 @@ def aggregate_sk_props(
     n_hops: int,
 ) -> pd.DataFrame:
     """Aggregate skeleton properties for each vertex across its neighorhood."""
-    sk_prop_df[f"{prefix}_area_um2"] = -1
-    sk_prop_df[f"{prefix}_vol_um3"] = -1
-    sk_prop_df[f"{prefix}_max_dt_um"] = -1
-    sk_prop_df[f"{prefix}_vol_to_area"] = -1
-    sk_prop_df[f"{prefix}_syn_in"] = -1
-    sk_prop_df[f"{prefix}_syn_out"] = -1
+    sk_prop_df[f"{prefix}_area_um2"] = -1.0
+    sk_prop_df[f"{prefix}_vol_um3"] = -1.0
+    sk_prop_df[f"{prefix}_max_dt_um"] = -1.0
+    sk_prop_df[f"{prefix}_vol_to_area"] = -1.0
+    sk_prop_df[f"{prefix}_syn_in"] = -1.0
+    sk_prop_df[f"{prefix}_syn_out"] = -1.0
 
     for ii, nn in enumerate(neibs):
         rows = sk_prop_df.loc[nn]
