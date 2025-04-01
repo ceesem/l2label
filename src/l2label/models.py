@@ -3,9 +3,7 @@ import json
 import pathlib
 from typing import Optional
 
-import xgboost
-
-model_dir = pathlib.Path(__file__).parents[2] / "models"
+model_dir = pathlib.Path(__file__).parent / "models"
 
 current_model = "model_ds15_us0_bd0.json"
 

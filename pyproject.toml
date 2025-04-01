@@ -102,12 +102,3 @@ help = "Profile cpu and memory of task with scalene"
 [tool.poe.tasks.profile]
 cmd = "uv run pyinstrument -r html"
 help = "Profile cpu of task with pyinstrument"
-
-[tool.hatch.build.targets.sdist]
-only-include = ["src/l2label", "models"]
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/l2label"]
-
-[tool.hatch.build.targets.wheel.force-include]
-"models" = "l2label/models"
