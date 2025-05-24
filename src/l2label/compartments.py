@@ -311,7 +311,7 @@ def save_model(
         modelpath.mkdir()
     model_filename = (
         modelpath
-        / f"{model_name}_ds{downstream_hops}_us{upstream_hops}_bd{bidirectional_hops}.joblib"
+        / f"{model_name}_ds{downstream_hops}_us{upstream_hops}_bd{bidirectional_hops}.ubj"
     )
     model.save_model(model_filename)
 
@@ -345,7 +345,7 @@ class AxonLabel:
     ):
         if config is not None:
             if not isinstance(config, dict):
-                config = models.load_model_config(config, dir="")
+                config = models.load_model_config(config, dir=None)
             self._downstream_hops = config.get("downstream_hops")
             self._upstream_hops = config.get("upstream_hops")
             self._bidirectional_hops = config.get("bidirectional_hops")

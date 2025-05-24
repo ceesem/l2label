@@ -1,0 +1,1 @@
+{"downstream_hops": 15, "upstream_hops": 0, "bidirectional_hops": 0, "feature_columns": ["area_um2", "vol_um3", "max_dt_um", "vol_to_area", "syn_in", "syn_out", "down_area_um2", "down_vol_um3", "down_max_dt_um", "down_vol_to_area", "down_syn_in", "down_syn_out"], "spread_alpha": 0.5, "model_file": "xgb/v1dd_ds15_us0_bd0.ubj"}

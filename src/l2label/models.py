@@ -5,7 +5,7 @@ from typing import Optional
 
 model_dir = pathlib.Path(__file__).parent / "models"
 
-current_model = "model_ds15_us0_bd0.json"
+current_model = "minnie65_ds15_us0_bd0.json"
 
 
 def get_models(
@@ -17,7 +17,7 @@ def get_models(
     if dir is None:
         dir = model_dir
 
-    return [f.name for f in glob.glob(f"{dir}/*.json")]
+    return [pathlib.Path(f).name for f in glob.glob(f"{dir}/*.json")]
 
 
 def load_model_config(
